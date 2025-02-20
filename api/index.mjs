@@ -1,10 +1,15 @@
 import express from "express";
-import db from './db.mjs'
+import cors from "cors";
 import postsRoutes from "./routes/posts1.mjs";
 import usersRoutes from "./routes/users.mjs";
 import authRoutes from "./routes/auth.mjs";
 
 const app = express()
+
+app.use(cors({
+    origin: "http://localhost:5173", // Allow requests from this frontend URL
+    credentials: true, // Allow cookies if needed
+}));
 
 app.use(express.json())
 
