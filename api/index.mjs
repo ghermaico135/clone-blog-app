@@ -3,6 +3,8 @@ import cors from "cors";
 import postsRoutes from "./routes/posts1.mjs";
 import usersRoutes from "./routes/users.mjs";
 import authRoutes from "./routes/auth.mjs";
+import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
 
 const app = express()
 
@@ -12,6 +14,8 @@ app.use(cors({
 }));
 
 app.use(express.json())
+app.use(bodyParser.json());
+app.use(cookieParser())
 
 app.use("/api/posts", postsRoutes)
 
