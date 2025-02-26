@@ -2,9 +2,6 @@ import db from "../db.mjs"
 import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken'
 
-
-
-
 export const register = (req,res) =>{
         const q = "SELECT * FROM users WHERE email= ? OR username = ?"
         db.query(q, [req.body.email,req.body.username], (err, data) =>{
@@ -27,25 +24,28 @@ export const register = (req,res) =>{
     
         }
 
-export function login(req,res){
+export  function login (req,res){
     // checkUser name
     const q = "SELECT * FROM users WHERE username = ?"
-    db.query(q, [req,body,username],(err, data) =>{
+    db.query(q, [req.body.username], (err, data) =>{
        
-
-        if(err) return res.json(err)
+        if(err) return res.status(500).json(err)
         if(data.length === 0) return res.status(404).json("User not found")
+
+        let user = data[0]
+        console.log("Stored Hashed Password:", user.password);
+        console.log("Entered Password:", req.body.password);
         
         // check password
-        const isPasswordCorrect = bcrypt.compareSync(req.boyd.password, data[0].password)
-
+        const isPasswordCorrect = bcrypt.compare(req.body.password, user.password)
+        console.log(isPasswordCorrect)
        
         if(!isPasswordCorrect) return res.status(400).json("wrong username or password ")
 
-        const token = jwt.sign({id: data[0].id},"jwtmikikey",{
+        const token = jwt.sign({id: user.id},"jwtmikikey",{
             expiresIn: "1h", // Token expires in 1 hour
         })
-        const { password, ...other} = data[0]
+        const { password, ...other} = user
         res.cookie("access_token",token,
             {
             httpOnly:true,
@@ -58,7 +58,7 @@ export function login(req,res){
     }
 
 
-
+   
 
 
 
