@@ -1,10 +1,13 @@
 import express from "express"
-import {add} from "../controller/postsController.mjs"
+import {getPosts,getPost,addPost,deletePost,updatePost} from "../controller/postsController.mjs"
 
 const router = express.Router()
 
-
-router.get("/test", add)
+router.get("/", getPosts)
+router.get("/:id",getPost)
+router.post("/", addPost)
+router.delete("/:id", deletePost)
+router.put("/:id", updatePost)
 
 
 export default router

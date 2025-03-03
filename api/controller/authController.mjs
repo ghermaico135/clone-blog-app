@@ -45,6 +45,7 @@ export  function login (req,res){
         const token = jwt.sign({id: user.id},"jwtmikikey",{
             expiresIn: "1h", // Token expires in 1 hour
         })
+
         const { password, ...other} = user
         res.cookie("access_token",token,
             {
@@ -57,18 +58,10 @@ export  function login (req,res){
     // return res.sendStatus(200)
     }
 
-
-   
-
-
-
-
-
-
-
-
-
-
 export function logout(req,res){
+    res.clearCookie("access_token",{
+        sameSite:"none",
+        secure:true
+    }).status(200).json("user have been successfully logout")
     
     }
